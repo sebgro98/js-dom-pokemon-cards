@@ -1,11 +1,6 @@
-console.log(data[0])
-
-const pokemonListUl = document.querySelector("#pokemon"); // first one
-
-
 function renderPokemonCard() {
 
-    const pokemonList = document.getElementById('cards'); // first 
+    const pokemonList = document.getElementById('cards');
 
     pokemonList.innerHTML = "";
 
@@ -29,28 +24,53 @@ function renderPokemonCard() {
         const pokemonCardTextUl = document.createElement("ul");
         pokemonCardTextUl.classList.add("card--text");
 
-        
-        const pokemonStats = document.createElement('li');
-        pokemonCardTextUl.appendChild(pokemonStats);
-       
+        const statsLabels = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"];
 
-        pokemonStats.textContent = 
-        `HP: ${pokemon.stats[0].base_stat}
-         Attack: ${pokemon.stats[1].base_stat} 
-         Defense: ${pokemon.stats[2].base_stat} 
-         Sp. Atk: ${pokemon.stats[3].base_stat} 
-         Sp. Def: ${pokemon.stats[4].base_stat} 
-         Speed: ${pokemon.stats[5].base_stat}`;
+        pokemon.stats.forEach((stat, index) => {
+        const pokemonStatLi = document.createElement("li");
+        pokemonStatLi.textContent = `${statsLabels[index]}: ${stat.base_stat}`;
+        pokemonCardTextUl.appendChild(pokemonStatLi);
+        });
+         
+        pokemonLi.appendChild(pokemonCardTextUl);
+        pokemonList.appendChild(pokemonLi)
         
-         pokemonLi.appendChild(pokemonCardTextUl);
-        
-   
-        
-        
-        pokemonList.appendChild(pokemonLi);
-        
-        console.log(pokemon);
+         
+        const gameAppearancesUl = document.createElement("ul");
+
+        const gameTitleLi = document.createElement("li");
+        gameTitleLi.textContent = "Appeared in Games:";
+        gameAppearancesUl.appendChild(gameTitleLi);
+
+        pokemon.game_indices.forEach((gameIndex) => {
+            const gameLi = document.createElement("li");
+            gameLi.textContent = gameIndex.version.name;
+            gameAppearancesUl.appendChild(gameLi);
+        });
+
+        pokemonLi.appendChild(gameAppearancesUl);
+
+    const pokemonImages = [
+        pokemon.sprites.front_default,   
+        pokemon.sprites.back_default,    
+        pokemon.sprites.front_shiny     
+    ];
+    
+    let currentImageIndex = 0;
+    const pokemonImage = document.createElement("img");
+    pokemonImage.src = pokemonImages[currentImageIndex];
+    pokemonImage.style.cursor = "pointer"; 
+
+    // Add event listener to toggle image on click
+    pokemonImage.addEventListener("click", () => {
+        currentImageIndex = (currentImageIndex + 1) % pokemonImages.length;
+        pokemonImage.src = pokemonImages[currentImageIndex];
+    });
+
+    pokemonLi.appendChild(pokemonImage);
     }
+    
+   
 }
 
 function main() {
